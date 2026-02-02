@@ -5,4 +5,3 @@ numpy
 nltk
 joblib
 matplotlib
-string
