@@ -5,3 +5,5 @@ numpy
 nltk
 joblib
 matplotlib
+ssl
+string
