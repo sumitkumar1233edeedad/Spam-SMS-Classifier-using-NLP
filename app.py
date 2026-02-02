@@ -94,6 +94,7 @@ if st.button("🔍 Analyze Message", use_container_width=True):
 
         if prediction == 1:
             st.error("🚨 Spam Message Detected")
+            st.balloons()
             st.write(f"Confidence: **{round(prob[1]*100,2)}%**")
 
         else:
