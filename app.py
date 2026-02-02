@@ -81,25 +81,28 @@ def predict_sms(msg):
     vector_input = vector.transform([clean_msg])
     prediction = model.predict(vector_input)[0]
     prob = model.predict_proba(vector_input)[0]
-    return prediction, prob, clean_msg
+    label_map = {0: "Ham", 1: "Spam"}
+    return label_map[prediction], prob, clean_msg
 
 # ---------------- PREDICTION ----------------
 if st.button("🔍 Analyze Message", use_container_width=True):
     if not message.strip():
         st.warning("⚠ Please enter a message first")
     else:
-        prediction, prob, clean_msg = predict_sms(message)
+        label, prob, clean_msg = predict_sms(message)
         
         st.markdown(f"**Preprocessed Message:** `{clean_msg}`")
         st.divider()
 
-        if prediction == 1:
+        if label == "Spam":
             st.error("🚨 Spam Message Detected")
-            st.balloons()
-            st.progress(round(prob[1]*100))
+    
+            st.progress(int(prob[1]*100))
             st.write(f"Confidence: **{round(prob[1]*100,2)}%**")
         else:
             st.success("✅ Safe Message (Ham)")
+            st.balloons()
+            st.progress(int(prob[0]*100))
             st.write(f"Confidence: **{round(prob[0]*100,2)}%**")
 
 # ---------------- SIDEBAR ----------------
