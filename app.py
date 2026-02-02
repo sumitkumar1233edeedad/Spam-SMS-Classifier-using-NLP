@@ -1,0 +1,140 @@
+import streamlit as st
+import joblib
+import nltk
+import string
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+
+
+# ---------------- UI CONFIG ----------------
+st.set_page_config(
+    page_title="SMS Spam Detector",
+    page_icon="📩",
+    layout="centered"
+)
+
+# ---------------- HEADER ----------------
+st.markdown(
+    """
+    <h1 style='text-align: center; color: #4CAF50;'>
+        📩 SMS Spam Detection System
+    </h1>
+    <p style='text-align: center;'>
+        Detect whether a message is <b>Spam</b> or <b>Ham</b>
+    </p>
+    """,
+    unsafe_allow_html=True
+)
+
+st.divider()
+
+
+# ---------------- LOAD MODEL ----------------
+model = joblib.load("model.pkl")
+vector = joblib.load("vector.pkl")
+
+
+# ---------------- TEXT PREPROCESSOR ----------------
+class TextPreprocessor:
+
+    def __init__(self):
+        nltk.download('punkt', quiet=True)
+        nltk.download('stopwords', quiet=True)
+        nltk.download('wordnet', quiet=True)
+
+        self.stop_words = set(stopwords.words('english'))
+        self.lemmatizer = WordNetLemmatizer()
+
+    def preprocess(self, text):
+
+        text = str(text).lower()
+        text = text.translate(str.maketrans('', '', string.punctuation))
+ 
+        tokens = word_tokenize(text)
+
+        tokens = [
+            self.lemmatizer.lemmatize(word, pos='v')
+            for word in tokens
+            if word not in self.stop_words
+        ]
+
+        return " ".join(tokens)
+
+
+preprocessor = TextPreprocessor()
+
+
+# ---------------- INPUT AREA ----------------
+st.subheader("✉ Enter Your Message")
+
+message = st.text_area(
+    "",
+    placeholder="Type or paste SMS here...",
+    height=150
+)
+
+
+# ---------------- PREDICTION ----------------
+if st.button("🔍 Analyze Message", use_container_width=True):
+
+    if message.strip() == "":
+        st.warning("⚠ Please enter a message first")
+
+    else:
+        clean_msg = preprocessor.preprocess(message)
+
+        # FIX → vector expects list
+        vector_input = vector.transform([clean_msg])
+
+        prediction = model.predict(vector_input)[0]
+        prob = model.predict_proba(vector_input)[0]
+
+        st.divider()
+
+        if prediction == 1:
+            st.error("🚨 Spam Message Detected")
+            st.write(f"Confidence: **{round(prob[1]*100,2)}%**")
+
+        else:
+            st.success("✅ Safe Message (Ham)")
+            st.write(f"Confidence: **{round(prob[0]*100,2)}%**")
+
+
+# ---------------- SIDEBAR ----------------
+st.sidebar.header("📌 About Project")
+
+st.sidebar.write("""
+This ML model classifies SMS messages using:
+
+- TF-IDF Vectorization
+- SMOTE Balancing
+- Logistic Regression
+- NLP Text Preprocessing
+""")
+
+st.sidebar.divider()
+
+st.sidebar.write("👨‍💻 Built with Streamlit")
+
+st.divider()
+
+st.markdown("""
+<style>
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #0E1117;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+}
+</style>
+
+<div class="footer">
+    🚀 Built with ❤️ using Streamlit | NLP Spam Detection Project  
+</div>
+""", unsafe_allow_html=True)
