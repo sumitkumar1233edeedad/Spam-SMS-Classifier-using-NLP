@@ -10,7 +10,7 @@ Spam SMS messages are a common problem that can lead to fraud, phishing attacks,
 
 The project demonstrates a complete NLP workflow including text preprocessing, feature extraction using TF-IDF, model training, evaluation, and deployment using Streamlit for real-time predictions.
 
-💻 **Live Demo (Streamlit App):** [Click Here](https://spam-sms-classifier-using-nlpstreamlit.app/)
+💻 **Live Demo (Streamlit App):** [Click Here](https://spam-sms-classifier-using-nlp.streamlit.app/)
 ---
 
 ## 🧠 Features
