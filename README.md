@@ -28,7 +28,8 @@ The project demonstrates a complete NLP workflow including text preprocessing, f
 spam-sms-classifier/
 │
 ├── data/                  # Dataset files
-├── models/                # Saved trained models
+├── model
+s/                # Saved trained models
 ├── app.py                 # Streamlit web app
 ├── train_model.py         # Model training script
 ├── vectorizer.pkl         # Saved TF-IDF vectorizer
