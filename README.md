@@ -31,8 +31,7 @@ spam-sms-classifier/
 ├── data/                  # Dataset files
 ├── model
 s/                # Saved trained models
-├── app.py                 # Streamlit web app
-├── train_model.py         # Model training script
+├── app.py                 # Streamlit web app      
 ├── vectorizer.pkl         # Saved TF-IDF vectorizer
 ├── model.pkl              # Saved ML model
 ├── requirements.txt       # Dependencies
