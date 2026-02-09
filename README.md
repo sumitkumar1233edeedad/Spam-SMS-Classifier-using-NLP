@@ -90,7 +90,7 @@ https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset
 
 ```bash
 git clone https://github.com/yourusername/spam-sms-classifier.git
-cd spam-sms-classifier
+cd Spam-SMS-Classifier-using-NLP
 ```
 
 ---
